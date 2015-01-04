@@ -17,7 +17,7 @@ class MainWindow(QtGui.QWidget):
         self.layout = QtGui.QVBoxLayout(self)
 
         self.run_btn = QtGui.QPushButton('run sim')
-        self.connect(self.run_btn, QtCore.SIGNAL("released()"), self.test)
+        self.connect(self.run_btn, QtCore.SIGNAL("released()"), self.run)
 
         self.plot = pyqtgraph.PlotWidget()
 
@@ -37,7 +37,7 @@ class MainWindow(QtGui.QWidget):
         self.asset.update_price()
         self.plot.plot(self.asset.price_history)
 
-    def test(self):
+    def run(self):
 
         self.plot.clear()
 
