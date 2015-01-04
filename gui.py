@@ -12,32 +12,44 @@ class MainWindow(QtGui.QWidget):
         QtGui.QWidget.__init__(self, parent)
 
         self.setWindowTitle('price_sim_app')
-        self.setGeometry(200, 200, 1000, 800)
+        self.setGeometry(200, 200, 400, 600)
 
         self.layout = QtGui.QVBoxLayout(self)
 
         self.run_btn = QtGui.QPushButton('run sim')
-        self.connect(self.run_btn, QtCore.SIGNAL("released()"), self.start)
+        self.connect(self.run_btn, QtCore.SIGNAL("released()"), self.run)
 
         self.plot = pyqtgraph.PlotWidget()
 
+        self.data_widget = QtGui.QTextEdit()
+
         self.layout.addWidget(self.run_btn)
         self.layout.addWidget(self.plot)
+        self.layout.addWidget(self.data_widget)
+
+        self.asset = None
 
         # threading
         # self.work_thread = None
         self.thread_pool = []
 
-        self.market = sim.Market()
-        self.market.generate_assets(1)
-        self.market.update_assets()
-        self.asset = self.market.asset_list[0]
-
     def plot_batch(self):
         self.asset.update_price()
         self.plot.plot(self.asset.price_history)
 
-    def start(self):
+    def run(self):
+
+        self.asset = sim.Asset()
+        self.asset.set_attributes()
+
+        self.data_widget.clear()
+
+        self.asset = sim.Asset()
+        self.asset.set_attributes()
+
+        self.data_widget.append('symbol: {}'.format(self.asset.symbol))
+        self.data_widget.append('start price: {}'.format(self.asset.price))
+        self.data_widget.append('volatility: {}'.format(self.asset.volatility))
 
         self.plot.clear()
 
@@ -56,9 +68,9 @@ class Worker(QtCore.QThread):
         self.wait()
 
     def run(self):
-        for _ in range(5):
-            time.sleep(0.3)  # artificial time delay
-            self.emit(QtCore.SIGNAL('update(QString)'), "completed job ")
+        for _ in range(500):
+            time.sleep(0.1)  # artificial time delay
+            self.emit(QtCore.SIGNAL('update(QString)'), "update")
 
         self.terminate()
 
