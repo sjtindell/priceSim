@@ -44,9 +44,6 @@ class MainWindow(QtGui.QWidget):
 
         self.data_widget.clear()
 
-        self.asset = sim.Asset()
-        self.asset.set_attributes()
-
         self.data_widget.append('symbol: {}'.format(self.asset.symbol))
         self.data_widget.append('start price: {}'.format(self.asset.price))
         self.data_widget.append('volatility: {}'.format(self.asset.volatility))
